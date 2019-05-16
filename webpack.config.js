@@ -1,3 +1,5 @@
+const webpack = require('webpack')
+
 module.exports = {
   module: {
     rules: [
@@ -5,9 +7,14 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader"
-        }
-      }
-    ]
-  }
-};
+          loader: 'babel-loader',
+        },
+      },
+    ],
+  },
+  plugins: [new webpack.IgnorePlugin(/\.\/native/, /\/pg\//)],
+  target: 'node',
+  node: {
+    fs: 'empty',
+  },
+}
