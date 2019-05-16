@@ -1,0 +1,10 @@
+version: '3.3'
+
+services:
+  db:
+    image: sylvaindns/pg_potential-enigma
+    # build: ./docker/postgres
+    restart: always
+    ports:
+      - '5432:5432'
+    env_file: .env
