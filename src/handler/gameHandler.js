@@ -1,5 +1,5 @@
 import { database, executeSql } from '../utils/database'
-import { badRequest } from '@hapi/boom'
+import { badRequest, notFound } from '@hapi/boom'
 
 export const gameHandler = {
   get: () => {
@@ -20,6 +20,22 @@ export const gameHandler = {
       [name]
     )
       .then(res => res[0])
+      .catch(err => badRequest(err))
+
+    return reply
+  },
+  remove: request => {
+    const { game_id } = request.params
+
+    const reply = executeSql(
+      database,
+      'UPDATE game SET "deletedAt" = now() WHERE game_id = $1::uuid AND "deletedAt" IS NULL RETURNING game_id, name, "createdAt", "completedAt";',
+      [game_id]
+    )
+      .then(res => {
+        if (res.length) return res[0]
+        else return notFound('game_id ' + game_id + ' does not exists')
+      })
       .catch(err => badRequest(err))
 
     return reply

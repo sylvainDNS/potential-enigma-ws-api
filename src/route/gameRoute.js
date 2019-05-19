@@ -11,4 +11,9 @@ export const gameRoute = server => {
     path: '/games',
     handler: gameHandler.add,
   })
+  server.route({
+    method: 'DELETE',
+    path: '/games/{game_id}',
+    handler: gameHandler.remove,
+  })
 }
