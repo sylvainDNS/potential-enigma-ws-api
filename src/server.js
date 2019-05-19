@@ -1,5 +1,6 @@
 import { Server } from '@hapi/hapi'
 import { config } from './utils/config'
+import { gameRoute } from './route/gameRoute'
 
 export default function start() {
   const server = new Server({
@@ -14,4 +15,8 @@ export default function start() {
       console.error(err)
     }
   )
+
+  gameRoute(server)
+
+  return server
 }
