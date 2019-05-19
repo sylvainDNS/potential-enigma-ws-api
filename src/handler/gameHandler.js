@@ -11,4 +11,17 @@ export const gameHandler = {
 
     return reply
   },
+  add: request => {
+    const { name } = request.payload
+
+    const reply = executeSql(
+      database,
+      'INSERT INTO game( name ) VALUES( $1::text ) RETURNING game_id, name, "createdAt", "completedAt";',
+      [name]
+    )
+      .then(res => res[0])
+      .catch(err => badRequest(err))
+
+    return reply
+  },
 }

@@ -6,4 +6,9 @@ export const gameRoute = server => {
     path: '/games',
     handler: gameHandler.get,
   })
+  server.route({
+    method: 'POST',
+    path: '/games',
+    handler: gameHandler.add,
+  })
 }
