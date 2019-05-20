@@ -21,4 +21,9 @@ export const gameRoute = server => {
     path: '/games/{game_id}',
     handler: gameHandler.remove,
   })
+  server.route({
+    method: 'PUT',
+    path: '/games/{game_id}',
+    handler: gameHandler.update,
+  })
 }

@@ -51,4 +51,21 @@ export const gameHandler = {
 
     return reply
   },
+  update: request => {
+    const { game_id } = request.params,
+      { isCompleted } = request.payload
+
+    if (typeof isCompleted !== 'boolean') return badRequest('Unknown parameter')
+    else
+      return executeSql(
+        database,
+        'UPDATE game SET "completedAt" = $1 WHERE game_id = $2::uuid AND "deletedAt" IS NULL RETURNING game_id, name, "createdAt", "completedAt";',
+        [(() => (isCompleted ? 'now()' : null))(), game_id]
+      )
+        .then(res => {
+          if (res.length) return res[0]
+          else return notFound('game_id ' + game_id + ' does not exists')
+        })
+        .catch(err => badRequest(err))
+  },
 }
