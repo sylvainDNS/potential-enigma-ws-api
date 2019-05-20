@@ -11,6 +11,17 @@ export const gameHandler = {
 
     return reply
   },
+  getOne: request => {
+    const { game_id } = request.params
+
+    const reply = executeSql(
+      database,
+      'SELECT game_id, name, "createdAt", "completedAt" FROM GAME WHERE "deletedAt" IS NULL AND game_id = $1::uuid',
+      [game_id]
+    ).catch(err => badRequest(err))
+
+    return reply
+  },
   add: request => {
     const { name } = request.payload
 
