@@ -1,6 +1,8 @@
 import { Server } from '@hapi/hapi'
+import Io from 'socket.io'
 import { config } from './utils/config'
 import { gameRoute } from './route/gameRoute'
+import { spreadSocket } from './socket/spreadSocket'
 
 export default function start() {
   const server = new Server({
@@ -15,6 +17,10 @@ export default function start() {
       console.error(err)
     }
   )
+
+  const socket = Io(server.listener)
+
+  spreadSocket(socket)
 
   gameRoute(server)
 
