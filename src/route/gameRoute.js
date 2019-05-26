@@ -1,6 +1,6 @@
 import { gameHandler } from '../handler/gameHandler'
 
-export const gameRoute = server => {
+export const gameRoute = (server, socket) => {
   server.route({
     method: 'GET',
     path: '/games',
@@ -14,16 +14,16 @@ export const gameRoute = server => {
   server.route({
     method: 'POST',
     path: '/games',
-    handler: gameHandler.add,
+    handler: request => gameHandler.add(request, socket),
   })
   server.route({
     method: 'DELETE',
     path: '/games/{game_id}',
-    handler: gameHandler.remove,
+    handler: request => gameHandler.remove(request, socket),
   })
   server.route({
     method: 'PUT',
     path: '/games/{game_id}',
-    handler: gameHandler.update,
+    handler: request => gameHandler.update(request, socket),
   })
 }

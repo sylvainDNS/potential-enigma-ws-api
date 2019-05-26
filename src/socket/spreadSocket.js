@@ -5,3 +5,8 @@ export const spreadSocket = socket => {
     console.log('Client connected on /spread')
   })
 }
+
+export const emitGameId = (socket, event, game) => {
+  socket.of('/spread').emit(event, game.game_id)
+  return game
+}

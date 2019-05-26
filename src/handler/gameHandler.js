@@ -1,5 +1,6 @@
 import { database, executeSql } from '../utils/database'
 import { badRequest, notFound } from '@hapi/boom'
+import { emitGameId } from '../socket'
 
 export const gameHandler = {
   get: () => {
@@ -22,7 +23,7 @@ export const gameHandler = {
 
     return reply
   },
-  add: request => {
+  add: (request, socket) => {
     const { name } = request.payload
 
     const reply = executeSql(
@@ -31,11 +32,12 @@ export const gameHandler = {
       [name]
     )
       .then(res => res[0])
+      .then(game => emitGameId(socket, 'add', game))
       .catch(err => badRequest(err))
 
     return reply
   },
-  remove: request => {
+  remove: (request, socket) => {
     const { game_id } = request.params
 
     const reply = executeSql(
@@ -47,11 +49,12 @@ export const gameHandler = {
         if (res.length) return res[0]
         else return notFound('game_id ' + game_id + ' does not exists')
       })
+      .then(game => emitGameId(socket, 'delete', game))
       .catch(err => badRequest(err))
 
     return reply
   },
-  update: request => {
+  update: (request, socket) => {
     const { game_id } = request.params,
       { isCompleted } = request.payload
 
@@ -66,6 +69,7 @@ export const gameHandler = {
           if (res.length) return res[0]
           else return notFound('game_id ' + game_id + ' does not exists')
         })
+        .then(game => emitGameId(socket, 'complete', game))
         .catch(err => badRequest(err))
   },
 }

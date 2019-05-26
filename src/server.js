@@ -22,7 +22,7 @@ export default function start() {
 
   spreadSocket(socket)
 
-  gameRoute(server)
+  gameRoute(server, socket)
 
   return server
 }
