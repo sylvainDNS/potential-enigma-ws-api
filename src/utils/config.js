@@ -15,4 +15,8 @@ export const config = env().getOrElseAll({
     user: 'potential_enigma',
     password: 'P@ssword',
   },
+  swagger: {
+    schemes: 'http',
+    path: 'localhost:4444',
+  },
 })
